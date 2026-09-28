@@ -2,6 +2,7 @@
   const $app = document.getElementById('app');
   const $nav = document.getElementById('nav');
   let timer = null;
+  const mount = (...nodes) => $app.replaceChildren(...nodes.flat());
 
   let storedUser = null;
   try { storedUser = JSON.parse(localStorage.getItem('user') || 'null'); } catch (e) { /* ignore */ }
@@ -90,12 +91,12 @@
           mode === 'login' ? 'Need an account? Register' : 'Have an account? Log in')
       )
     );
-    $app.replaceChildren(h('div', { class: 'card' }, h('h2', {}, mode === 'login' ? 'Log in' : 'Register'), form));
+    mount(h('div', { class: 'card' }, h('h2', {}, mode === 'login' ? 'Log in' : 'Register'), form));
   }
 
   // ---------- student ----------
   async function studentView() {
-    $app.replaceChildren(h('p', { class: 'muted' }, 'Loading...'));
+    mount(h('p', { class: 'muted' }, 'Loading...'));
     const [exams, results] = await Promise.all([api('/exams'), api('/exams/results/me')]);
 
     const examCards = exams.length
@@ -119,7 +120,7 @@
             h('td', {}, fmt(r.submittedAt)))))
       : h('p', { class: 'muted' }, 'No results yet.');
 
-    $app.replaceChildren(h('h2', {}, 'Available exams'), examCards, h('div', { class: 'card' }, h('h2', {}, 'My results'), table));
+    mount(h('h2', {}, 'Available exams'), examCards, h('div', { class: 'card' }, h('h2', {}, 'My results'), table));
   }
 
   async function takeExam(id) {
@@ -159,7 +160,7 @@
             h('input', { type: 'radio', name: 'q' + i, onchange: () => { answers[i] = j; } }),
             opt))));
 
-    $app.replaceChildren(
+    mount(
       h('div', { class: 'card row' }, h('h2', {}, data.exam.title), clock),
       questions,
       h('button', { onclick: () => { if (confirm('Submit your answers?')) submit(); } }, 'Submit exam'));
@@ -169,7 +170,7 @@
   }
 
   function showResult(title, r) {
-    $app.replaceChildren(h('div', { class: 'card' },
+    mount(h('div', { class: 'card' },
       h('h2', {}, title),
       h('div', { class: 'score' }, `${r.score} / ${r.total}`),
       r.late ? notice('Submitted after the deadline, so the answers were not graded.') : notice('Exam submitted successfully.', 'ok'),
@@ -178,7 +179,7 @@
 
   // ---------- admin ----------
   async function adminView() {
-    $app.replaceChildren(h('p', { class: 'muted' }, 'Loading...'));
+    mount(h('p', { class: 'muted' }, 'Loading...'));
     const exams = await api('/exams');
 
     // -- create exam form --
@@ -258,7 +259,7 @@
           : h('p', { class: 'muted' }, 'No submissions yet.')));
     }
 
-    $app.replaceChildren(createCard, h('h2', {}, 'Exams'), list, resultsPanel);
+    mount(createCard, h('h2', {}, 'Exams'), list, resultsPanel);
   }
 
   // ---------- router ----------
@@ -272,7 +273,7 @@
     const view = state.user.role === 'admin' ? adminView() : studentView();
     view.catch((e) => {
       if (e.status === 401) logout();
-      else $app.replaceChildren(notice(e.message));
+      else mount(notice(e.message));
     });
   }
 
