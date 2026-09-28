@@ -1,0 +1,32 @@
+:root { --bg:#f4f6fb; --card:#fff; --ink:#1d2433; --muted:#6b7488; --brand:#3f5efb; --danger:#d64545; --ok:#1f9d63; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--ink); }
+header { display:flex; justify-content:space-between; align-items:center; padding:14px 24px; background:var(--brand); color:#fff; }
+header h1 { font-size:1.1rem; margin:0; }
+nav { display:flex; gap:14px; align-items:center; font-size:.9rem; }
+main { max-width:860px; margin:24px auto; padding:0 16px; }
+.card { background:var(--card); border-radius:10px; padding:18px 20px; margin-bottom:16px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+h2 { margin-top:0; font-size:1.15rem; }
+h3 { margin:0 0 6px; font-size:1rem; }
+.muted { color:var(--muted); font-size:.9rem; }
+label { display:block; margin:10px 0 4px; font-size:.85rem; font-weight:600; }
+input, textarea, select { width:100%; padding:9px 10px; border:1px solid #cfd5e3; border-radius:6px; font:inherit; }
+button { background:var(--brand); color:#fff; border:0; padding:9px 16px; border-radius:6px; font:inherit; cursor:pointer; }
+button.secondary { background:#e6e9f4; color:var(--ink); }
+button.danger { background:var(--danger); }
+button.link { background:none; color:#fff; text-decoration:underline; padding:0; }
+.row { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+.notice { padding:9px 12px; border-radius:6px; margin:10px 0; }
+.notice.error { background:#fde8e8; color:var(--danger); }
+.notice.ok { background:#e2f6ec; color:var(--ok); }
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+th, td { text-align:left; padding:8px 6px; border-bottom:1px solid #e6e9f2; }
+.clock { font-variant-numeric: tabular-nums; font-weight:700; font-size:1.2rem; }
+.clock.low { color:var(--danger); }
+fieldset { border:1px solid #e0e4ef; border-radius:8px; margin:0 0 14px; padding:12px 14px; }
+legend { font-weight:600; padding:0 6px; }
+.option { display:flex; gap:8px; align-items:center; padding:4px 0; }
+.option input { width:auto; }
+.qbuilder { border:1px dashed #b9c1d9; border-radius:8px; padding:10px 12px; margin:10px 0; }
+.score { font-size:2.2rem; font-weight:700; color:var(--brand); }
+form .row { margin-top: 16px; }

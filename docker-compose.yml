@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      DATA_FILE: /app/data/db.json
+    volumes:
+      - exam-data:/app/data
+
+volumes:
+  exam-data:

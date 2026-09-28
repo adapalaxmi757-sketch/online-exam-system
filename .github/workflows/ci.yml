@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  docker-build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t online-exam-system:${{ github.sha }} .
+      - name: Smoke test container
+        run: |
+          docker run -d --name exam -p 3000:3000 -e JWT_SECRET=ci-secret online-exam-system:${{ github.sha }}
+          for i in $(seq 1 15); do
+            curl -fs http://localhost:3000/health && exit 0
+            sleep 2
+          done
+          docker logs exam
+          exit 1
+
+  # ------------------------------------------------------------------
+  # TODO (AWS phase, added later): push the image to ECR and deploy.
+  # deploy:
+  #   needs: docker-build
+  #   if: github.ref == 'refs/heads/main'
+  #   ...
+  # ------------------------------------------------------------------
