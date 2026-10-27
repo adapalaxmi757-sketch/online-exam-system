@@ -11,12 +11,16 @@ jobs:
     strategy:
       matrix:
         node: [20, 22]
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
+          cache-dependency-path: backend/package-lock.json
       - run: npm ci
       - run: npm test
 
@@ -36,11 +40,3 @@ jobs:
           done
           docker logs exam
           exit 1
-
-  # ------------------------------------------------------------------
-  # TODO (AWS phase, added later): push the image to ECR and deploy.
-  # deploy:
-  #   needs: docker-build
-  #   if: github.ref == 'refs/heads/main'
-  #   ...
-  # ------------------------------------------------------------------

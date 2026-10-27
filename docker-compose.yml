@@ -3,11 +3,11 @@ services:
     build: .
     ports:
       - "3000:3000"
-    env_file: .env
+    env_file: ./backend/.env
     environment:
-      DATA_FILE: /app/data/db.json
+      DATA_FILE: /app/backend/data/db.json
     volumes:
-      - exam-data:/app/data
+      - exam-data:/app/backend/data
 
 volumes:
   exam-data:

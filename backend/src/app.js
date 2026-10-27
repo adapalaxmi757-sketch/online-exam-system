@@ -18,7 +18,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/exams', require('./routes/exams'));
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
 
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, '..', '..', 'frontend')));
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

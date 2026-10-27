@@ -1,34 +1,49 @@
-# Cloud-Native Online Examination System
+# Cloud-Native Online Examination System with CI/CD
 
-Node.js + Express API with a lightweight browser front end, JWT auth, role-based access
-(admin / student), timed exams with server-enforced deadlines, automatic grading,
-Docker packaging and a GitHub Actions CI pipeline.
+A web app where admins create timed multiple-choice exams and students take them and are graded instantly.
+Built with Node.js + Express, a plain HTML/CSS/JS front end, JWT authentication, Docker and GitHub Actions CI.
+AWS deployment is the next phase.
 
-## Run locally
-    npm install
-    npm run seed      # optional: creates admin + a sample exam
-    npm start         # http://localhost:3000
+## Project structure
 
-Default admin (from .env): admin@exam.local / Admin@12345. Change it before any real use.
-Students self-register on the login page.
+    online-exam-system/
+    |-- frontend/            What the user sees in the browser
+    |   |-- index.html       The single page
+    |   |-- style.css        Styling
+    |   `-- app.js           Screens: login, student dashboard, exam, admin
+    |-- backend/             The server (REST API)
+    |   |-- src/
+    |   |   |-- server.js    Starts the server
+    |   |   |-- app.js       Express setup and routes
+    |   |   |-- config.js    Settings from .env
+    |   |   |-- seed.js      Creates the first admin and a sample exam
+    |   |   |-- store.js     Data layer (JSON file for now)
+    |   |   |-- middleware/auth.js   Token and role checks
+    |   |   `-- routes/      auth.js (register, login), exams.js (exams, start, submit, results)
+    |   |-- tests/           Automated tests (Jest + Supertest)
+    |   `-- package.json
+    |-- aws/                 Cloud deployment plan (next phase)
+    |-- .github/workflows/   CI pipeline
+    |-- Dockerfile
+    `-- docker-compose.yml
+
+## Run locally (Windows PowerShell)
+
+    npm.cmd run setup     # install backend dependencies
+    npm.cmd run seed      # create admin and sample exam
+    npm.cmd start         # http://localhost:3000
+
+Admin login: admin@exam.local / Admin@12345 (set in backend/.env). Students register on the login page.
 
 ## Test
-    npm test
+
+    npm.cmd test
 
 ## Docker
+
     docker compose up --build
 
-## API summary
-| Method | Path | Role |
-|---|---|---|
-| POST | /api/auth/register, /api/auth/login | public |
-| GET | /api/exams | any |
-| POST | /api/exams | admin |
-| DELETE | /api/exams/:id | admin |
-| GET | /api/exams/:id/results | admin |
-| POST | /api/exams/:id/start | student |
-| POST | /api/exams/:id/submit | student |
-| GET | /api/exams/results/me | student |
-| GET | /health | public |
+## CI/CD
 
-AWS deployment: see aws/README.md (planned, not implemented).
+On every push GitHub Actions runs the tests on Node 20 and 22, builds the Docker image and smoke-tests /health.
+The AWS deploy step is planned (see aws/README.md).
